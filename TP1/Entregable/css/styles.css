@@ -1,0 +1,68 @@
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: cadetblue;
+}
+
+.logo_paint {
+    width: 90px;
+    border-radius: 50%;
+    margin: 3px;
+    border: solid 2px black;
+}
+
+.barra_herramientas { /*nav*/
+    width: 40%;
+}
+
+.barra_herramientas ul {
+    display: flex;
+    list-style: none;
+    margin-top: 25px;
+}
+
+.barra_herramientas ul li {
+    margin: 3px;
+}
+
+.logo_lapiz {
+    width: 30px;
+}
+
+.logo_goma {
+    width: 30px;
+}
+
+.section_canvas {
+    width: 40%;
+}
+
+/*Canvas*/
+.main {
+    margin: 10px;
+}
+
+.canvas {
+    border: solid 2px black;
+    margin: 8px;
+}
+
+.botonera_canvas {
+    display: flex;
+    justify-content: center;
+}
+
+.botonera_canvas button {
+    margin: 0 4px;
+    border-radius: 50px;
+    background-color: darkcyan;
+    text-decoration: none;
+}
+
+.botonera_canvas input {
+    margin: 0 4px;
+    border-radius: 50px;
+    background-color: darkcyan;
+    text-decoration: none;
+}
