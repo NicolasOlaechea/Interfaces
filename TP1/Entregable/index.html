@@ -25,9 +25,25 @@
             <canvas id="canvas" class="canvas" width="500" height="500">
 
             </canvas>
+        </section>
+
+        <section class="section_options">
+            <div class="filtros">
+                <button class="btn_negativo" id="btn_negativo">Negativo</button>
+                <button class="btn_brillo" id="btn_brillo">Brillo</button>
+                <button class="btn_binarizacion" id="btn_binarizacion">Binarizacion</button>
+                <button class="btn_sepia" id="btn_sepia">Sepia</button>
+                <button class="btn_saturacion" id="btn_saturacion">Saturacion</button>
+                <button class="btn_bordes" id="btn_bordes">Bordes</button>
+                <button class="btn_blur" id="btn_blur">Blur</button>
+            </div>
+
             <div class="botonera_canvas">    
                 <button id="btnLimpiarLienzo">Limpiar lienzo</button>
-                <input type="file" id="archivo" accept=".jpg, .png, .jpeg">    
+                <div class="div_file">
+                    <p>Insertar imagen</p>
+                    <input type="file" id="archivo" accept=".jpg, .png, .jpeg">
+                </div>    
             </div>
         </section>
     </main>

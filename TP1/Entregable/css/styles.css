@@ -41,6 +41,8 @@
 /*Canvas*/
 .main {
     margin: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .canvas {
@@ -53,16 +55,77 @@
     justify-content: center;
 }
 
-.botonera_canvas button {
-    margin: 0 4px;
-    border-radius: 50px;
-    background-color: darkcyan;
-    text-decoration: none;
+/*Filtros*/
+.section_options {
+    margin: 8px;
+    border: solid 2px black;
+    width: 55%;
 }
 
-.botonera_canvas input {
+.filtros {
+    height: 70%;;
+    margin: 8px;
+    /*border: 2px black solid;*/
+}
+
+.filtros button{
+    width: 150px;
+    height: 100px;
+    background-color: #407F7F;
+    padding: 30px;
+    margin: 10px;
+    border: solid 2px black;
+    border-radius: 100%;
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.botonera_canvas {
+    margin: 8px;
+    /*border: 2px black solid;*/
+}
+
+.section_options .botonera_canvas #btnLimpiarLienzo {
+    width: 150px;
+    height: 70px;
     margin: 0 4px;
     border-radius: 50px;
-    background-color: darkcyan;
+    background-color: #D46A6A;
     text-decoration: none;
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.div_file {
+    position: relative;
+    padding: 10px;
+    width: 150px;
+    background-color: #2499e3;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.div_file p {
+    text-align: center;
+    color: white;
+}
+
+.div_file #archivo {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
 }
