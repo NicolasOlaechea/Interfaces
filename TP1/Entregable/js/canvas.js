@@ -3,8 +3,8 @@
 //Creo las variable globales
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
-let widthCanvas = canvas.width;
-let heightCanvas = canvas.height;
+let width = canvas.width;
+let height = canvas.height;
 let rectCanvas = canvas.getBoundingClientRect(); //Coordenadas iniciales del canvas, el left y el top. Respecto a la pantalla
 let x = 0; 
 let y = 0;
@@ -16,6 +16,8 @@ let lapiz = document.getElementById("logo_lapiz");
 let goma = document.getElementById("logo_goma");
 let archivo = document.getElementById("archivo");
 let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
+let btnFiltroNegativo = document.getElementById("btn_negativo");
+let a = 255;
 
 //Le asigno los eventos a los elementos correspondientes------------------------------------------------------
 
@@ -41,6 +43,9 @@ btnLimpiarLienzo.addEventListener("click", function(){
     limpiarLienzo();
 })
 
+btnFiltroNegativo.addEventListener("click", function(){
+    aplicarFiltroNegativo();
+})
 //Creo las funciones
 function permitirDibujar(){
     //Le asigno al canvas distintos eventos para poder dibujar sobre él
@@ -103,5 +108,57 @@ function insertarImagen(reader){
 }
 
 function dibujarImagen(imagen){
-    ctx.drawImage(imagen, 0, 0, widthCanvas, heightCanvas);
+    ctx.drawImage(imagen, 0, 0, width, height);
+}
+
+function aplicarFiltroGrises(){
+    let imageData = ctx.getImageData(0, 0, width, height);
+    
+    for(let x=0; x<width; x++){
+        for(let y=0; y<height; y++){
+            let r = getRed(imageData, x, y);
+            let g = getGreen(imageData, x, y);
+            let b = getBlue(imageData, x, y);
+            let valor = (r + g + b) / 3;
+            setPixel(imageData, x, y, valor, valor, valor, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+function aplicarFiltroNegativo(){
+    let imageData = ctx.getImageData(0, 0, width, height);
+    
+    for(let x=0; x<width; x++){
+        for(let y=0; y<height; y++){
+            let r = 255 - getRed(imageData, x, y);
+            let g = 255 - getGreen(imageData, x, y);
+            let b = 255 - getBlue(imageData, x, y);
+            setPixel(imageData, x, y, r, g, b, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+function setPixel(imageData, x, y, r, g, b, a){ 
+    let index = (x + y * imageData.width) * 4;
+    imageData.data[index + 0] = r;
+    imageData.data[index + 1] = g;
+    imageData.data[index + 2] = b;
+    imageData.data[index + 3] = a;
+}
+
+function getRed(imageData, x, y){
+    let index = (x + y * imageData.width) * 4;
+    return imageData.data[index+0];
+}
+
+function getGreen(imageData, x, y){
+    let index = (x + y * imageData.width) * 4;
+    return imageData.data[index+1];
+}
+
+function getBlue(imageData, x, y){
+    let index = (x + y * imageData.width) * 4;
+    return imageData.data[index+2];
 }
