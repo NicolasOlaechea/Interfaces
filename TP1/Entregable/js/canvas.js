@@ -18,9 +18,9 @@ let archivo = document.getElementById("archivo");
 let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
 let btnFiltroEscalaGrises = document.getElementById("btn_escala_grises");
 let btnFiltroNegativo = document.getElementById("btn_negativo");
-//let btnFiltroNegativo = document.getElementById("btn_negativo");
+let btnFiltroBrillo = document.getElementById("btn_brillo");
 let btnFiltroBinarizacion = document.getElementById("btn_binarizacion");
-//let btnFiltroNegativo = document.getElementById("btn_negativo");
+let btnFiltroSepia = document.getElementById("btn_sepia");
 //let btnFiltroNegativo = document.getElementById("btn_negativo");
 let a = 255;
 
@@ -58,6 +58,14 @@ btnFiltroNegativo.addEventListener("click", function(){
 
 btnFiltroBinarizacion.addEventListener("click", function(){
     aplicarFiltroBinarizacion();
+})
+
+btnFiltroBrillo.addEventListener("click", function(){
+    aplicarFiltroBrillo();
+})
+
+btnFiltroSepia.addEventListener("click", function(){
+    aplicarFiltroSepia();
 })
 
 //Creo las funciones
@@ -125,6 +133,7 @@ function dibujarImagen(imagen){
     ctx.drawImage(imagen, 0, 0, width, height);
 }
 
+//TERMINADO
 function aplicarFiltroEscalaGrises(){
     let imageData = ctx.getImageData(0, 0, width, height);
     //Saco el promedio entre la suma de los valores de rgb de cada pixel asigno ese valor
@@ -140,6 +149,39 @@ function aplicarFiltroEscalaGrises(){
     ctx.putImageData(imageData, 0, 0);
 }
 
+//EN DUDA
+function aplicarFiltroBrillo(){
+    let imageData = ctx.getImageData(0, 0, width, height);
+    let nivelBrillo = document.getElementById("brillo").value;
+
+    for(let x=0; x<width; x++){
+        for(let y=0; y<height; y++){
+            let r = parseInt(nivelBrillo * getRed(imageData, x, y));
+            let g = parseInt(nivelBrillo * getGreen(imageData, x, y));
+            let b = parseInt(nivelBrillo * getBlue(imageData, x, y));
+
+            if(r > 255){
+                r = 255;
+            }else if(r < 0){
+                r = 0;
+            }
+            if(g > 255){
+                g = 255;
+            }else if(r < 0){
+                g = 0;
+            }
+            if(b > 255){
+                b = 255;
+            }else if(r < 0){
+                b = 0;
+            }
+            setPixel(imageData, x, y, r, g, b, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+//TERMINADO
 function aplicarFiltroNegativo(){
     let imageData = ctx.getImageData(0, 0, width, height);
     //A cada valor del rgb le asigno su opuesto, que es el valor lo que le falta al valor actual para llegar a 255
@@ -154,6 +196,7 @@ function aplicarFiltroNegativo(){
     ctx.putImageData(imageData, 0, 0);
 }
 
+//TERMINADO
 function aplicarFiltroBinarizacion(){
     let imageData = ctx.getImageData(0, 0, width, height);
     //Si los valores de rgb son menores a 255/2 les asigno 0 y si son mayores les asigno 255
@@ -162,22 +205,35 @@ function aplicarFiltroBinarizacion(){
             let r = getRed(imageData, x, y);
             let g = getGreen(imageData, x, y);
             let b = getBlue(imageData, x, y);
-            if(r <= (255/2)){
+            if((r+g+b)/3 < (255/3)){
                 r = 0;
-            }else{
-                r = 255;
-            }
-            if(g <= (255/2)){
                 g = 0;
-            }else{
-                g = 255;
-            }
-            if(b <= (255/2)){
                 b = 0;
             }else{
+                r = 255;
+                g = 255;
                 b = 255;
             }
             setPixel(imageData, x, y, r, g, b, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+//TERMINADO
+function aplicarFiltroSepia(){
+    let imageData = ctx.getImageData(0, 0, width, height);
+
+    for(let x=0; x<width; x++){
+        for(let y=0; y<height; y++){
+            let r = getRed(imageData, x, y);
+            let g = getGreen(imageData, x, y);
+            let b = getBlue(imageData, x, y);
+
+            let red = (r * .393) + (g * .769) + (b * .189);
+            let green = (r * .349) + (g * .686) + (b * .168);
+            let blue = (r * .272) + (g * .534) + (b * .131);
+            setPixel(imageData, x, y, red, green, blue, a);
         }
     }
     ctx.putImageData(imageData, 0, 0);
