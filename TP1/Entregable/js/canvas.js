@@ -15,6 +15,7 @@ let grosor = document.getElementById("grosor_lapiz");
 let lapiz = document.getElementById("logo_lapiz");
 let goma = document.getElementById("logo_goma");
 let archivo = document.getElementById("archivo");
+let btnDescargarImagen = document.getElementById("btn_descargar_imagen");
 let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
 let btnFiltroEscalaGrises = document.getElementById("btn_escala_grises");
 let btnFiltroNegativo = document.getElementById("btn_negativo");
@@ -32,6 +33,10 @@ archivo.addEventListener("change", function(e){ //Cuando se cargue un archivo...
     reader.addEventListener("load", function(){ //Cuando cargue la imagen...
         insertarImagen(reader);
     });
+})
+
+btnDescargarImagen.addEventListener("click", function(){
+    descargarImagen();
 })
 
 lapiz.addEventListener("click", function(){
@@ -199,7 +204,7 @@ function aplicarFiltroNegativo(){
 //TERMINADO
 function aplicarFiltroBinarizacion(){
     let imageData = ctx.getImageData(0, 0, width, height);
-    //Si los valores de rgb son menores a 255/2 les asigno 0 y si son mayores les asigno 255
+    //Si la suma de los valores de rgb dividido 3 es menor a 255/3 les asigno 0 y si es mayor les asigno 255
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
             let r = getRed(imageData, x, y);
@@ -237,6 +242,13 @@ function aplicarFiltroSepia(){
         }
     }
     ctx.putImageData(imageData, 0, 0);
+}
+
+function descargarImagen(){
+    var link = document.getElementById('link');
+    link.setAttribute('download', 'imagen.png');
+    link.setAttribute('href', canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+    link.click();
 }
 
 function setPixel(imageData, x, y, r, g, b, a){ 
