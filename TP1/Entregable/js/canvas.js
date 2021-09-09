@@ -19,7 +19,7 @@ let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
 let btnFiltroEscalaGrises = document.getElementById("btn_escala_grises");
 let btnFiltroNegativo = document.getElementById("btn_negativo");
 //let btnFiltroNegativo = document.getElementById("btn_negativo");
-//let btnFiltroNegativo = document.getElementById("btn_negativo");
+let btnFiltroBinarizacion = document.getElementById("btn_binarizacion");
 //let btnFiltroNegativo = document.getElementById("btn_negativo");
 //let btnFiltroNegativo = document.getElementById("btn_negativo");
 let a = 255;
@@ -54,6 +54,10 @@ btnFiltroEscalaGrises.addEventListener("click", function(){
 
 btnFiltroNegativo.addEventListener("click", function(){
     aplicarFiltroNegativo();
+})
+
+btnFiltroBinarizacion.addEventListener("click", function(){
+    aplicarFiltroBinarizacion();
 })
 
 //Creo las funciones
@@ -123,7 +127,7 @@ function dibujarImagen(imagen){
 
 function aplicarFiltroEscalaGrises(){
     let imageData = ctx.getImageData(0, 0, width, height);
-    
+    //Saco el promedio entre la suma de los valores de rgb de cada pixel asigno ese valor
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
             let r = getRed(imageData, x, y);
@@ -138,12 +142,41 @@ function aplicarFiltroEscalaGrises(){
 
 function aplicarFiltroNegativo(){
     let imageData = ctx.getImageData(0, 0, width, height);
-    
+    //A cada valor del rgb le asigno su opuesto, que es el valor lo que le falta al valor actual para llegar a 255
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
             let r = 255 - getRed(imageData, x, y);
             let g = 255 - getGreen(imageData, x, y);
             let b = 255 - getBlue(imageData, x, y);
+            setPixel(imageData, x, y, r, g, b, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+function aplicarFiltroBinarizacion(){
+    let imageData = ctx.getImageData(0, 0, width, height);
+    //Si los valores de rgb son menores a 255/2 les asigno 0 y si son mayores les asigno 255
+    for(let x=0; x<width; x++){
+        for(let y=0; y<height; y++){
+            let r = getRed(imageData, x, y);
+            let g = getGreen(imageData, x, y);
+            let b = getBlue(imageData, x, y);
+            if(r <= (255/2)){
+                r = 0;
+            }else{
+                r = 255;
+            }
+            if(g <= (255/2)){
+                g = 0;
+            }else{
+                g = 255;
+            }
+            if(b <= (255/2)){
+                b = 0;
+            }else{
+                b = 255;
+            }
             setPixel(imageData, x, y, r, g, b, a);
         }
     }
