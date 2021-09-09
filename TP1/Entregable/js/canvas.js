@@ -16,7 +16,12 @@ let lapiz = document.getElementById("logo_lapiz");
 let goma = document.getElementById("logo_goma");
 let archivo = document.getElementById("archivo");
 let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
+let btnFiltroEscalaGrises = document.getElementById("btn_escala_grises");
 let btnFiltroNegativo = document.getElementById("btn_negativo");
+//let btnFiltroNegativo = document.getElementById("btn_negativo");
+//let btnFiltroNegativo = document.getElementById("btn_negativo");
+//let btnFiltroNegativo = document.getElementById("btn_negativo");
+//let btnFiltroNegativo = document.getElementById("btn_negativo");
 let a = 255;
 
 //Le asigno los eventos a los elementos correspondientes------------------------------------------------------
@@ -43,9 +48,14 @@ btnLimpiarLienzo.addEventListener("click", function(){
     limpiarLienzo();
 })
 
+btnFiltroEscalaGrises.addEventListener("click", function(){
+    aplicarFiltroEscalaGrises();
+})
+
 btnFiltroNegativo.addEventListener("click", function(){
     aplicarFiltroNegativo();
 })
+
 //Creo las funciones
 function permitirDibujar(){
     //Le asigno al canvas distintos eventos para poder dibujar sobre él
@@ -111,7 +121,7 @@ function dibujarImagen(imagen){
     ctx.drawImage(imagen, 0, 0, width, height);
 }
 
-function aplicarFiltroGrises(){
+function aplicarFiltroEscalaGrises(){
     let imageData = ctx.getImageData(0, 0, width, height);
     
     for(let x=0; x<width; x++){
