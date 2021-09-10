@@ -22,7 +22,7 @@ let btnFiltroNegativo = document.getElementById("btn_negativo");
 let btnFiltroBrillo = document.getElementById("btn_brillo");
 let btnFiltroBinarizacion = document.getElementById("btn_binarizacion");
 let btnFiltroSepia = document.getElementById("btn_sepia");
-//let btnFiltroNegativo = document.getElementById("btn_negativo");
+let btnFiltroBlur = document.getElementById("btn_blur");
 let a = 255;
 
 //Le asigno los eventos a los elementos correspondientes------------------------------------------------------
@@ -67,6 +67,10 @@ btnFiltroBinarizacion.addEventListener("click", function(){
 
 btnFiltroBrillo.addEventListener("click", function(){
     aplicarFiltroBrillo();
+})
+
+btnFiltroBlur.addEventListener("click", function(){
+    filtroBlur();
 })
 
 btnFiltroSepia.addEventListener("click", function(){
@@ -244,6 +248,24 @@ function aplicarFiltroSepia(){
     ctx.putImageData(imageData, 0, 0);
 }
 
+function filtroBlur() {
+    let imageData = ctx.getImageData(0, 0, width, height);
+
+    for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+            //Controlo que este sea un pixel dentro de la matriz y no este en un extremo de la misma
+            if (!(x < 1 || y < 1 || x + 1 == width || y + 1 == height)) {
+                let r = vecinosRed(imageData, x, y);
+                let g = vecinosGreen(imageData, x, y);
+                let b = vecinosBlue(imageData, x, y);
+                setPixel(imageData, x, y, r, g, b, a);
+            }
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+//Terminado con dudas
 function descargarImagen(){
     var link = document.getElementById('link');
     link.setAttribute('download', 'imagen.png');
@@ -272,4 +294,52 @@ function getGreen(imageData, x, y){
 function getBlue(imageData, x, y){
     let index = (x + y * imageData.width) * 4;
     return imageData.data[index+2];
+}
+
+function getAlpha(imageData, x, y) {
+    let index = (x + y * imageData.width) * 4;
+    return imageData.data[index + 3];
+}
+
+function vecinosRed(imageData, x, y) {
+    let v1 = getRed(imageData, x - 1, y - 1);
+    let v2 = getRed(imageData, x, y - 1);
+    let v3 = getRed(imageData, x + 1, y - 1);
+    let v4 = getRed(imageData, x - 1, y);
+    let v5 = getRed(imageData, x, y);
+    let v6 = getRed(imageData, x + 1, y);
+    let v7 = getRed(imageData, x - 1, y + 1);
+    let v8 = getRed(imageData, x, y + 1);
+    let v9 = getRed(imageData, x + 1, y + 1);
+    
+    let suma = v1+v2+v3+v4+v5+v6+v7+v8+v9;
+    return suma / 9;
+}
+function vecinosGreen(imageData, x, y) {
+    let v1 = getGreen(imageData, x - 1, y - 1);
+    let v2 = getGreen(imageData, x, y - 1);
+    let v3 = getGreen(imageData, x + 1, y - 1);
+    let v4 = getGreen(imageData, x - 1, y);
+    let v5 = getGreen(imageData, x, y);
+    let v6 = getGreen(imageData, x + 1, y);
+    let v7 = getGreen(imageData, x - 1, y + 1);
+    let v8 = getGreen(imageData, x, y + 1);
+    let v9 = getGreen(imageData, x + 1, y + 1);
+    
+    let suma = v1+v2+v3+v4+v5+v6+v7+v8+v9;
+    return suma / 9;
+}
+function vecinosBlue(imageData, x, y) {
+    let v1 = getBlue(imageData, x - 1, y - 1);
+    let v2 = getBlue(imageData, x, y - 1);
+    let v3 = getBlue(imageData, x + 1, y - 1);
+    let v4 = getBlue(imageData, x - 1, y);
+    let v5 = getBlue(imageData, x, y);
+    let v6 = getBlue(imageData, x + 1, y);
+    let v7 = getBlue(imageData, x - 1, y + 1);
+    let v8 = getBlue(imageData, x, y + 1);
+    let v9 = getBlue(imageData, x + 1, y + 1);
+    
+    let suma = v1+v2+v3+v4+v5+v6+v7+v8+v9;
+    return suma / 9;
 }
