@@ -134,11 +134,28 @@ function insertarImagen(reader){
     let imagen = new Image(); //Creo la imagen
     imagen.src = reader.result; //Guardo el src
     imagen.addEventListener("load", function (){ //Cuando cargue la imagen...
-        dibujarImagen(this);
+        if(imagen.width < width){ //Si la imagen es menos ancha que el canvas... el canvas se achica y toma las 
+            //medidas de la imagen
+            canvas.width = imagen.width;
+            canvas.height = imagen.height;
+            dibujarImagen(this, imagen.width, imagen.height); 
+        }else if(imagen.width > width || imagen.height > height){ //Si la imagen es mas grande que el canvas...
+            //la imagen se adapta al ancho del canvas y el alto del canvas se adapta al de la imagen
+            //Poniendo un limite de altura del canvas de 500px
+            let max_height = 500;
+            if(imagen.height > max_height){
+                canvas.height = max_height;
+                height = max_height;
+                dibujarImagen(this, width, max_height);
+            }else{
+                canvas.height = imagen.height;
+                dibujarImagen(this, width, imagen.height);
+            }
+        }
     });
 }
 
-function dibujarImagen(imagen){
+function dibujarImagen(imagen, width, height){
     ctx.drawImage(imagen, 0, 0, width, height);
 }
 
@@ -248,6 +265,7 @@ function aplicarFiltroSepia(){
     ctx.putImageData(imageData, 0, 0);
 }
 
+//TERMINADO
 function filtroBlur() {
     let imageData = ctx.getImageData(0, 0, width, height);
 
