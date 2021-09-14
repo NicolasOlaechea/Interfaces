@@ -23,6 +23,7 @@ let btnFiltroBrillo = document.getElementById("btn_brillo");
 let btnFiltroBinarizacion = document.getElementById("btn_binarizacion");
 let btnFiltroSepia = document.getElementById("btn_sepia");
 let btnFiltroBlur = document.getElementById("btn_blur");
+let btnFiltroSaturacion = document.getElementById("btn_saturacion");
 let a = 255;
 
 //Le asigno los eventos a los elementos correspondientes------------------------------------------------------
@@ -70,18 +71,22 @@ btnFiltroBrillo.addEventListener("click", function(){
 })
 
 btnFiltroBlur.addEventListener("click", function(){
-    filtroBlur();
+    aplicarFiltroBlur();
 })
 
 btnFiltroSepia.addEventListener("click", function(){
     aplicarFiltroSepia();
 })
 
+btnFiltroSaturacion.addEventListener("click", function(){
+    aplicarFiltroSaturacion();
+})
+
 //Creo las funciones
 function permitirDibujar(){
     //Le asigno al canvas distintos eventos para poder dibujar sobre él
     canvas.addEventListener("mousedown", function(e){ //Cuando se hace click dentro del canvas
-        //Uso el e para saber donde dio click el usuario en la pantalla, dentro del canvas
+        //Uso el e para saber donde dio click el usuario en la pantalla dentro del canvas
         //La posicion en X respecto a la pantalla - la x del canvas. Lo mismo con la Y
         x = e.clientX - rectCanvas.left;
         y = e.clientY - rectCanvas.top;
@@ -112,11 +117,14 @@ function permitirDibujar(){
 
 function dibujar(x1, y1, x2, y2){ //Recibe las x e y iniciales y finales para dibujar
     ctx.beginPath(); //Crea una nueva ruta
+
+    //Cambio el color, dependiendo si esta borrando o dibujando
     if(borrando===true){
         color = "#ffffff";
     }else{
         color = document.getElementById("color_lapiz").value;
     }
+
     ctx.strokeStyle = color; //Defino el color
     ctx.lineWidth = grosor.value; //Defino el grosor
     ctx.moveTo(x1, y1); //Mueve el lapiz a la coordenada x1, y1
@@ -134,14 +142,18 @@ function insertarImagen(reader){
     let imagen = new Image(); //Creo la imagen
     imagen.src = reader.result; //Guardo el src
     imagen.addEventListener("load", function (){ //Cuando cargue la imagen...
-        if(imagen.width < width){ //Si la imagen es menos ancha que el canvas... el canvas se achica y toma las 
-            //medidas de la imagen
+        //Hago que la imagen se adapte al ancho del canvas
+        //Y el alto del canvas se adapte al alto de la imagen
+        //Todo eso para no perder el aspecto de la imagen
+
+        //Si la imagen es menos ancha que el canvas... el canvas se achica y toma las medidas de la imagen
+        if(imagen.width < width){ 
             canvas.width = imagen.width;
             canvas.height = imagen.height;
             dibujarImagen(this, imagen.width, imagen.height); 
         }else if(imagen.width > width || imagen.height > height){ //Si la imagen es mas grande que el canvas...
             //la imagen se adapta al ancho del canvas y el alto del canvas se adapta al de la imagen
-            //Poniendo un limite de altura del canvas de 500px
+            //Poniendo un limite de altura del canvas de 500px para que no se permite scrollear
             let max_height = 500;
             if(imagen.height > max_height){
                 canvas.height = max_height;
@@ -156,36 +168,52 @@ function insertarImagen(reader){
 }
 
 function dibujarImagen(imagen, width, height){
+    //Dibujo la imagen en el contexto
     ctx.drawImage(imagen, 0, 0, width, height);
 }
 
 //TERMINADO
 function aplicarFiltroEscalaGrises(){
+    //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
+
     let imageData = ctx.getImageData(0, 0, width, height);
-    //Saco el promedio entre la suma de los valores de rgb de cada pixel asigno ese valor
+    
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
+            //Obtengo los valores de r, g, b de cada pixel
             let r = getRed(imageData, x, y);
             let g = getGreen(imageData, x, y);
             let b = getBlue(imageData, x, y);
+
+            //Saco el promedio entre la suma de los valores de rgb de cada pixel asigno ese valor
             let valor = (r + g + b) / 3;
+
+            //Le asigno el mismo valor a rgb para obtener un tono gris
             setPixel(imageData, x, y, valor, valor, valor, a);
         }
     }
     ctx.putImageData(imageData, 0, 0);
 }
 
-//EN DUDA
+//TERMINADO
 function aplicarFiltroBrillo(){
+    //Me base en: https://www.youtube.com/watch?v=txAY16rquOM
+
     let imageData = ctx.getImageData(0, 0, width, height);
+    
+    //Valor que el usuario modifica a travez de un slider. Sera el porcentaje de aumento o decremento del nivel
+    //de brillo que se le aplicara a la imagen
     let nivelBrillo = document.getElementById("brillo").value;
 
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
+            //Aumento el brillo de los valores de rgb, multiplicando por el valor que el usuario desee(nivelBrillo)
             let r = parseInt(nivelBrillo * getRed(imageData, x, y));
             let g = parseInt(nivelBrillo * getGreen(imageData, x, y));
             let b = parseInt(nivelBrillo * getBlue(imageData, x, y));
 
+            //Controlo que los valores de r, g, b no sean menores de 0 o mayores de 255
+            //Si es menor a 0, se queda en 0. Si es mayor a 255, se queda en 255
             if(r > 255){
                 r = 255;
             }else if(r < 0){
@@ -209,13 +237,17 @@ function aplicarFiltroBrillo(){
 
 //TERMINADO
 function aplicarFiltroNegativo(){
+    //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
+
     let imageData = ctx.getImageData(0, 0, width, height);
-    //A cada valor del rgb le asigno su opuesto, que es el valor lo que le falta al valor actual para llegar a 255
+    
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
+            //A cada valor del rgb le asigno su opuesto, que es el valor lo que le falta al valor actual para llegar a 255
             let r = 255 - getRed(imageData, x, y);
             let g = 255 - getGreen(imageData, x, y);
             let b = 255 - getBlue(imageData, x, y);
+            
             setPixel(imageData, x, y, r, g, b, a);
         }
     }
@@ -224,13 +256,18 @@ function aplicarFiltroNegativo(){
 
 //TERMINADO
 function aplicarFiltroBinarizacion(){
+    //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
+    
     let imageData = ctx.getImageData(0, 0, width, height);
-    //Si la suma de los valores de rgb dividido 3 es menor a 255/3 les asigno 0 y si es mayor les asigno 255
+    
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
+            //Obtengo los valores de r, g, b de cada pixel
             let r = getRed(imageData, x, y);
             let g = getGreen(imageData, x, y);
             let b = getBlue(imageData, x, y);
+
+            //Si la suma de los valores de rgb dividido 3 es menor a 255/3 les asigno 0 y si es mayor les asigno 255
             if((r+g+b)/3 < (255/3)){
                 r = 0;
                 g = 0;
@@ -240,6 +277,7 @@ function aplicarFiltroBinarizacion(){
                 g = 255;
                 b = 255;
             }
+
             setPixel(imageData, x, y, r, g, b, a);
         }
     }
@@ -248,17 +286,22 @@ function aplicarFiltroBinarizacion(){
 
 //TERMINADO
 function aplicarFiltroSepia(){
+    //Me base en: https://www.etnassoft.com/2016/11/03/manipulacion-de-imagenes-con-javascript-parte-1/
+
     let imageData = ctx.getImageData(0, 0, width, height);
 
     for(let x=0; x<width; x++){
         for(let y=0; y<height; y++){
+            //Obtengo los valores de r, g, b de cada pixel
             let r = getRed(imageData, x, y);
             let g = getGreen(imageData, x, y);
             let b = getBlue(imageData, x, y);
 
+            //Aplico la siguiente formula, que modifica el valor de r, g, b aplicandole el filtro sepia
             let red = (r * .393) + (g * .769) + (b * .189);
             let green = (r * .349) + (g * .686) + (b * .168);
             let blue = (r * .272) + (g * .534) + (b * .131);
+
             setPixel(imageData, x, y, red, green, blue, a);
         }
     }
@@ -266,13 +309,16 @@ function aplicarFiltroSepia(){
 }
 
 //TERMINADO
-function filtroBlur() {
+function aplicarFiltroBlur() {
+    //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
     let imageData = ctx.getImageData(0, 0, width, height);
 
     for (let x = 0; x < width; x++) {
         for (let y = 0; y < height; y++) {
             //Controlo que este sea un pixel dentro de la matriz y no este en un extremo de la misma
             if (!(x < 1 || y < 1 || x + 1 == width || y + 1 == height)) {
+                //Guardo los valores nuevos de r, g, b. Se calculan sacando el promedio de la suma de los 
+                //vecinos del pixel
                 let r = vecinosRed(imageData, x, y);
                 let g = vecinosGreen(imageData, x, y);
                 let b = vecinosBlue(imageData, x, y);
@@ -283,15 +329,44 @@ function filtroBlur() {
     ctx.putImageData(imageData, 0, 0);
 }
 
-//Terminado con dudas
+function aplicarFiltroSaturacion(){
+    //Me base en: https://www.etnassoft.com/2016/11/03/manipulacion-de-imagenes-con-javascript-parte-1/
+
+    let imageData = ctx.getImageData(0, 0, width, height);
+
+    let contraste = 30; //La intensidad con la que se va a aplicar el filtro
+    
+    //Calculo el factor aplicando la siguiente formula, teniendo en cuenta el contraste creado anteriormente
+    let factor = (259 * (contraste + 255)) / (255 * (259 - contraste))
+    
+    for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+            //Cálculo del valor de cada píxel tras aplicar el factor anterior.
+            let r = factor * (getRed(imageData, x, y) - 128) + 128;
+            let g = factor * (getGreen(imageData, x, y) - 128) + 128;
+            let b = factor * (getBlue(imageData, x, y) - 128) + 128;
+            setPixel(imageData, x, y, r, g, b, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
+
+
+//TERMINADO
 function descargarImagen(){
-    var link = document.getElementById('link');
+    //Me base en: https://stackoverflow.com/questions/10673122/how-to-save-canvas-as-an-image-with-canvas-todataurl
+    
+    let link = document.createElement("a");
+    document.body.appendChild(link);
+
+    //Guarda el archivo con un nombre especifico y la carpeta
     link.setAttribute('download', 'imagen.png');
     link.setAttribute('href', canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
     link.click();
 }
 
 function setPixel(imageData, x, y, r, g, b, a){ 
+    //Primero obtengo el indice y luego modifico los valores de rgba que vienen por parametro
     let index = (x + y * imageData.width) * 4;
     imageData.data[index + 0] = r;
     imageData.data[index + 1] = g;
@@ -299,6 +374,7 @@ function setPixel(imageData, x, y, r, g, b, a){
     imageData.data[index + 3] = a;
 }
 
+//Obtengo los los valores de rgba de un pixel
 function getRed(imageData, x, y){
     let index = (x + y * imageData.width) * 4;
     return imageData.data[index+0];
@@ -319,6 +395,7 @@ function getAlpha(imageData, x, y) {
     return imageData.data[index + 3];
 }
 
+//Sumo los vecinos de un pixel para cada valor de rgb y retorno el promedio. Hago lo mismo para r, g, b
 function vecinosRed(imageData, x, y) {
     let v1 = getRed(imageData, x - 1, y - 1);
     let v2 = getRed(imageData, x, y - 1);
