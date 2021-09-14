@@ -367,6 +367,8 @@ function descargarImagen(){
 
 function restaurarImagen(){
     //Dibujo la copia de la imagen creada cuando se inserto por primera vez
+    width = copiaImagen.width;
+    height = copiaImagen.height;
     dibujarImagen(copiaImagen, width, height);
 }
 
