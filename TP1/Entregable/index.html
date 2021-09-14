@@ -21,7 +21,7 @@
         </nav>
     </header>
 
-    <main class="main">
+    <main class="main" id="main">
         <section class="section_canvas">
             <canvas id="canvas" class="canvas" width="550" height="400">
 
@@ -30,15 +30,21 @@
 
         <section class="section_options">
             <div class="filtros">
-                <button class="btn_escala_grises" id="btn_escala_grises">Escala de grises</button>
-                <button class="btn_negativo" id="btn_negativo">Negativo</button>
-                <button class="btn_brillo" id="btn_brillo">Brillo</button>
-                <input type="range" id="brillo" step="any" min="0.0" max="2.0">
-                <button class="btn_binarizacion" id="btn_binarizacion">Binarizacion</button>
-                <button class="btn_sepia" id="btn_sepia">Sepia</button>
-                <button class="btn_saturacion" id="btn_saturacion">Saturacion</button>
-                <button class="btn_bordes" id="btn_bordes">Bordes</button>
-                <button class="btn_blur" id="btn_blur">Blur</button>
+                <h2>Filtros</h2>
+                <div>
+                    <button class="btn_escala_grises" id="btn_escala_grises">Escala de grises</button>
+                    <button class="btn_binarizacion" id="btn_binarizacion">Binarizacion</button>
+                    <button class="btn_negativo" id="btn_negativo">Negativo</button>
+                    <button class="btn_sepia" id="btn_sepia">Sepia</button>
+                </div>
+                <div>
+                    <button class="btn_blur" id="btn_blur">Blur</button>
+                    <div class="div_brillo" id="div_brillo">
+                        <p>Brillo</p>
+                        <input type="range" id="brillo" step="any" min="0.0" max="2.0">
+                    </div>
+                    <button class="btn_saturacion" id="btn_saturacion">Saturacion</button>
+                </div>
             </div>
 
             <div class="botonera_canvas">    
@@ -47,7 +53,8 @@
                     <p>Insertar imagen</p>
                     <input type="file" id="archivo" accept=".jpg, .png, .jpeg">
                 </div>
-                <button id="btn_descargar_imagen">Descargar imagen</button> 
+                <button id="btn_descargar_imagen">Descargar imagen</button>
+                <button id="btn_restaurar_imagen">Restaurar</button>
             </div>
         </section>
     </main>

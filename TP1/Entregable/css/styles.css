@@ -1,8 +1,15 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #A6B0B7;
+}
+
 .header {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    background-color: cadetblue;
+    /*background-color: #0A91CB;*/
+    background-color: #3B6B8D;
 }
 
 .logo_paint {
@@ -48,6 +55,7 @@
 .canvas {
     border: solid 2px black;
     margin: 8px;
+    background-color: white;
 }
 
 .botonera_canvas {
@@ -58,7 +66,7 @@
 /*Filtros*/
 .section_options {
     margin: 8px;
-    border: solid 2px black;
+    /*border: solid 2px black;*/
     width: 55%;
 }
 
@@ -68,24 +76,64 @@
     /*border: 2px black solid;*/
 }
 
+.filtros h2 {
+    width: 100%;
+    padding: 5px;
+    font-size: 20px;
+    color: white;
+    background-color: #3B6B8D;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: unset;
+}
+
+.filtros div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /*border: solid 2px black;*/
+    padding: 15px 0;
+}
+
 .filtros button{
-    width: 150px;
-    height: 100px;
-    background-color: #407F7F;
-    padding: 30px;
+    width: 140px;
+    height: 60px;
+    margin: 10px 0;
+    background-color: #3B6B8D;
     margin: 10px;
     border: solid 2px black;
-    border-radius: 100%;
-    font-size: 18px;
+    border-radius: 10%;
+    font-size: 13px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bolder;
     text-align: center;
     color: white;
     cursor: pointer;
 }
 
+.filtros .div_brillo {
+    padding: 0;
+    display: inline-block;
+    width: 140px;
+    height: 60px;
+    margin: 20px 0;
+    background-color: #3B6B8D;
+    margin: 10px;
+    border: solid 2px black;
+    border-radius: 10%;
+    font-size: 13px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bolder;
+    text-align: center;
+    color: white;
+}
+
 .botonera_canvas {
     margin: 8px;
     /*border: 2px black solid;*/
+    margin-left: 50px;
+    position: absolute;
+    top: 26.5em;
 }
 
 .section_options .botonera_canvas #btnLimpiarLienzo {
@@ -93,7 +141,7 @@
     height: 70px;
     margin: 0 4px;
     border-radius: 50px;
-    background-color: #D46A6A;
+    background-color: #d6303b;
     text-decoration: none;
     font-size: 18px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -107,7 +155,7 @@
     padding: 10px;
     width: 150px;
     height: 55px;
-    background-color: #2499e3;
+    background-color: #0d739e;
     border-radius: 30px;
     cursor: pointer;
     font-size: 18px;
@@ -136,7 +184,21 @@
     height: 70px;
     margin: 0 4px;
     border-radius: 50px;
-    background-color: #00d451;
+    background-color: #26a53e;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.botonera_canvas #btn_restaurar_imagen {
+    width: 150px;
+    height: 70px;
+    margin: 0 4px;
+    border-radius: 50px;
+    background-color: #ffd000dc;
     text-decoration: none;
     font-size: 18px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;

@@ -19,7 +19,7 @@ let btnDescargarImagen = document.getElementById("btn_descargar_imagen");
 let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
 let btnFiltroEscalaGrises = document.getElementById("btn_escala_grises");
 let btnFiltroNegativo = document.getElementById("btn_negativo");
-let btnFiltroBrillo = document.getElementById("btn_brillo");
+let sliderBrillo = document.getElementById("brillo");
 let btnFiltroBinarizacion = document.getElementById("btn_binarizacion");
 let btnFiltroSepia = document.getElementById("btn_sepia");
 let btnFiltroBlur = document.getElementById("btn_blur");
@@ -66,7 +66,7 @@ btnFiltroBinarizacion.addEventListener("click", function(){
     aplicarFiltroBinarizacion();
 })
 
-btnFiltroBrillo.addEventListener("click", function(){
+sliderBrillo.addEventListener("change", function(){
     aplicarFiltroBrillo();
 })
 
