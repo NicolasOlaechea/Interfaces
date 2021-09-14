@@ -366,9 +366,14 @@ function descargarImagen(){
 }
 
 function restaurarImagen(){
-    //Dibujo la copia de la imagen creada cuando se inserto por primera vez
-    width = copiaImagen.width;
-    height = copiaImagen.height;
+    //Dibujo la copia de la imagen creada cuando se inserto por primera vez en la funcion insertarImagen()
+    
+    //Si la imagen es menos alta o ancha que el canvas...
+    if((copiaImagen.width < width) || (copiaImagen.height < height)){
+        //El canvas toma el valor de la imagen
+        width = copiaImagen.width;
+        height = copiaImagen.height;
+    }
     dibujarImagen(copiaImagen, width, height);
 }
 
