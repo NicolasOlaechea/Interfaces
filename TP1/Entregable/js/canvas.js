@@ -157,18 +157,21 @@ function insertarImagen(reader){
         if(imagen.width < width){ 
             canvas.width = imagen.width;
             canvas.height = imagen.height;
-            dibujarImagen(this, imagen.width, imagen.height); 
+            width = canvas.width;
+            height = canvas.height;
+            dibujarImagen(this, width, height); 
         }else if(imagen.width > width || imagen.height > height){ //Si la imagen es mas grande que el canvas...
             //la imagen se adapta al ancho del canvas y el alto del canvas se adapta al de la imagen
             //Poniendo un limite de altura del canvas de 500px para que no se permite scrollear
             let max_height = 500;
             if(imagen.height > max_height){
                 canvas.height = max_height;
-                height = max_height;
-                dibujarImagen(this, width, max_height);
+                height = canvas.height;
+                dibujarImagen(this, width, height);
             }else{
                 canvas.height = imagen.height;
-                dibujarImagen(this, width, imagen.height);
+                height = canvas.height;
+                dibujarImagen(this, width, height);
             }
         }
     });
