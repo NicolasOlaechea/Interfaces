@@ -31,6 +31,7 @@ let copiaImagen = null;
 //Le asigno los eventos a los elementos correspondientes------------------------------------------------------
 
 archivo.addEventListener("change", function(e){ //Cuando se cargue un archivo...
+    limpiarLienzo();
     let reader = new FileReader(); //Creo un objeto para almacenar la imagen ingresada
     reader.readAsDataURL(e.target.files[0]); //Leo el archivo y se lo paso al reader
     reader.addEventListener("load", function(){ //Cuando cargue la imagen...
@@ -140,6 +141,12 @@ function dibujar(x1, y1, x2, y2){ //Recibe las x e y iniciales y finales para di
 }
 
 function limpiarLienzo(){
+    //Pongo los valores originales del canvas, por si anteriormente tomo los valores de una imagen de otro tamaño
+    canvas.width = 550;
+    canvas.height = 400;
+    width = canvas.width;
+    height = canvas.height;
+
     //Limpio el canvas completamente
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
@@ -148,6 +155,13 @@ function insertarImagen(reader){
     let imagen = new Image(); //Creo la imagen
     imagen.src = reader.result; //Guardo el src
     copiaImagen = imagen; //Creo una copia
+    
+    //Pongo los valores originales del canvas, por si anteriormente tomo los valores de una imagen de otro tamaño
+    canvas.width = 550;
+    canvas.height = 400;
+    width = canvas.width;
+    height = canvas.height;
+
     imagen.addEventListener("load", function (){ //Cuando cargue la imagen...
         //Hago que la imagen se adapte al ancho del canvas
         //Y el alto del canvas se adapte al alto de la imagen
@@ -157,12 +171,15 @@ function insertarImagen(reader){
         if(imagen.width < width){ 
             canvas.width = imagen.width;
             canvas.height = imagen.height;
-            width = canvas.width;
-            height = canvas.height;
-            dibujarImagen(this, width, height); 
+            width = imagen.width;
+            height = imagen.height;
+            dibujarImagen(this, width, height);
         }else if(imagen.width > width || imagen.height > height){ //Si la imagen es mas grande que el canvas...
             //la imagen se adapta al ancho del canvas y el alto del canvas se adapta al de la imagen
-            //Poniendo un limite de altura del canvas de 500px para que no se permite scrollear
+            //Poniendo un limite de altura del canvas de 500px para que no se permita scrollear
+            if(imagen.width > width){
+                imagen.width = width;
+            }
             let max_height = 500;
             if(imagen.height > max_height){
                 canvas.height = max_height;
