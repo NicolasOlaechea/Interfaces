@@ -17,6 +17,7 @@ let goma = document.getElementById("logo_goma");
 let archivo = document.getElementById("archivo");
 let btnDescargarImagen = document.getElementById("btn_descargar_imagen");
 let btnLimpiarLienzo = document.getElementById("btnLimpiarLienzo");
+let btnRestaurarImagen = document.getElementById("btn_restaurar_imagen");
 let btnFiltroEscalaGrises = document.getElementById("btn_escala_grises");
 let btnFiltroNegativo = document.getElementById("btn_negativo");
 let sliderBrillo = document.getElementById("brillo");
@@ -25,6 +26,7 @@ let btnFiltroSepia = document.getElementById("btn_sepia");
 let btnFiltroBlur = document.getElementById("btn_blur");
 let btnFiltroSaturacion = document.getElementById("btn_saturacion");
 let a = 255;
+let copiaImagen = null;
 
 //Le asigno los eventos a los elementos correspondientes------------------------------------------------------
 
@@ -38,6 +40,10 @@ archivo.addEventListener("change", function(e){ //Cuando se cargue un archivo...
 
 btnDescargarImagen.addEventListener("click", function(){
     descargarImagen();
+})
+
+btnRestaurarImagen.addEventListener("click", function(){
+    restaurarImagen();
 })
 
 lapiz.addEventListener("click", function(){
@@ -141,6 +147,7 @@ function limpiarLienzo(){
 function insertarImagen(reader){
     let imagen = new Image(); //Creo la imagen
     imagen.src = reader.result; //Guardo el src
+    copiaImagen = imagen; //Creo una copia
     imagen.addEventListener("load", function (){ //Cuando cargue la imagen...
         //Hago que la imagen se adapte al ancho del canvas
         //Y el alto del canvas se adapte al alto de la imagen
@@ -172,10 +179,9 @@ function dibujarImagen(imagen, width, height){
     ctx.drawImage(imagen, 0, 0, width, height);
 }
 
-//TERMINADO
 function aplicarFiltroEscalaGrises(){
     //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
-
+    
     let imageData = ctx.getImageData(0, 0, width, height);
     
     for(let x=0; x<width; x++){
@@ -195,7 +201,6 @@ function aplicarFiltroEscalaGrises(){
     ctx.putImageData(imageData, 0, 0);
 }
 
-//TERMINADO
 function aplicarFiltroBrillo(){
     //Me base en: https://www.youtube.com/watch?v=txAY16rquOM
 
@@ -235,7 +240,6 @@ function aplicarFiltroBrillo(){
     ctx.putImageData(imageData, 0, 0);
 }
 
-//TERMINADO
 function aplicarFiltroNegativo(){
     //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
 
@@ -254,7 +258,6 @@ function aplicarFiltroNegativo(){
     ctx.putImageData(imageData, 0, 0);
 }
 
-//TERMINADO
 function aplicarFiltroBinarizacion(){
     //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
     
@@ -284,7 +287,6 @@ function aplicarFiltroBinarizacion(){
     ctx.putImageData(imageData, 0, 0);
 }
 
-//TERMINADO
 function aplicarFiltroSepia(){
     //Me base en: https://www.etnassoft.com/2016/11/03/manipulacion-de-imagenes-con-javascript-parte-1/
 
@@ -308,7 +310,6 @@ function aplicarFiltroSepia(){
     ctx.putImageData(imageData, 0, 0);
 }
 
-//TERMINADO
 function aplicarFiltroBlur() {
     //Me base en: https://www.youtube.com/watch?v=7jNEvl8KIr0&list=PLr5HJLJH1e4c8HbsyOBXK_J5bwgqebT0a&index=3
     let imageData = ctx.getImageData(0, 0, width, height);
@@ -352,7 +353,6 @@ function aplicarFiltroSaturacion(){
 }
 
 
-//TERMINADO
 function descargarImagen(){
     //Me base en: https://stackoverflow.com/questions/10673122/how-to-save-canvas-as-an-image-with-canvas-todataurl
     
@@ -363,6 +363,11 @@ function descargarImagen(){
     link.setAttribute('download', 'imagen.png');
     link.setAttribute('href', canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
     link.click();
+}
+
+function restaurarImagen(){
+    //Dibujo la copia de la imagen creada cuando se inserto por primera vez
+    dibujarImagen(copiaImagen, width, height);
 }
 
 function setPixel(imageData, x, y, r, g, b, a){ 
