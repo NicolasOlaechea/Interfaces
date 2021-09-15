@@ -378,6 +378,7 @@ function aplicarFiltroSaturacion(){
 }
 
 function aplicarFiltroEspejo(){
+    //Me base en: https://www.youtube.com/watch?v=QXMvi3ABly4&list=PLM-p96nOrGcabqC2GvLLIL_rxx3q89JI1&index=12
     let imageData = ctx.getImageData(0, 0, width, height);
     
     for(let x=0; x<width; x++){
