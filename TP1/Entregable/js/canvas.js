@@ -25,6 +25,7 @@ let btnFiltroBinarizacion = document.getElementById("btn_binarizacion");
 let btnFiltroSepia = document.getElementById("btn_sepia");
 let btnFiltroBlur = document.getElementById("btn_blur");
 let btnFiltroSaturacion = document.getElementById("btn_saturacion");
+let btnFiltroEspejo = document.getElementById("btn_espejo");
 let a = 255;
 let copiaImagen = null;
 
@@ -87,6 +88,10 @@ btnFiltroSepia.addEventListener("click", function(){
 
 btnFiltroSaturacion.addEventListener("click", function(){
     aplicarFiltroSaturacion();
+})
+
+btnFiltroEspejo.addEventListener("click", function(){
+    aplicarFiltroEspejo();
 })
 
 //Creo las funciones
@@ -372,6 +377,25 @@ function aplicarFiltroSaturacion(){
     ctx.putImageData(imageData, 0, 0);
 }
 
+function aplicarFiltroEspejo(){
+    let imageData = ctx.getImageData(0, 0, width, height);
+    
+    for(let x=0; x<width; x++){
+        for(let y=0; y<height; y++){
+            //Obtengo los valores de r, g, b de cada pixel
+            let r = getRed(imageData, x, y);
+            let g = getGreen(imageData, x, y);
+            let b = getBlue(imageData, x, y);
+
+            //Le asigno el mismo valor a rgb para obtener un tono gris
+            //Resto el ancho original y le resto x
+            //Ejemplo: si x=0 y width=600... el pixel de 0 aparece en el 600. De esa forma obtengo el espejo
+            //El -1 es para no salirse del rango
+            setPixel(imageData, width-x-1, y, r, g, b, a);
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
+}
 
 function descargarImagen(){
     //Me base en: https://stackoverflow.com/questions/10673122/how-to-save-canvas-as-an-image-with-canvas-todataurl
